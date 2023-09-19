@@ -14,6 +14,7 @@ env:
   
 jobs:
   publish:
+    permissions: write-all
     runs-on: windows-latest
     strategy:
       matrix:
