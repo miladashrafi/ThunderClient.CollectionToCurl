@@ -55,7 +55,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: release-$(date +"%Y%m%d%H%M%S")
+          tag_name: v$(date +"%Y%m%d%H%M%S")
           release_name: Release $(date +"%Y%m%d%H%M%S")
       
       - name: Create Release (x86)   
