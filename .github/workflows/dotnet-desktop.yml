@@ -21,6 +21,11 @@ jobs:
         dotnet-version: [ '7.x' ]
 
     steps:
+      - name: Set Tag Name
+        id: set_tag
+        run: echo "TAG_NAME=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+    
       - uses: actions/checkout@v4
       
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -55,8 +60,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v$(date +"%Y%m%d%H%M%S")
-          release_name: Release $(date +"%Y%m%d%H%M%S")
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
       
       - name: Create Release (x86)   
         uses: csexton/release-asset-action@v2
