@@ -6,8 +6,8 @@ env:
   PROJECT_PATH: ThunderClient.CollectionToCurl/ThunderClient.CollectionToCurl.csproj
   EXE_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl.exe
   EXE_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl.exe
-  ZIP_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl-Portable.zip
-  ZIP_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl-Portable.zip
+  ZIP_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl-Portable-x86.zip
+  ZIP_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl-Portable-x64.zip
   
 jobs:
   publish:
