@@ -12,7 +12,7 @@ env:
 jobs:
   publish:
     permissions: write-all
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: [ '7.x' ]
