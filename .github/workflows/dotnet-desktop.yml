@@ -17,14 +17,19 @@ jobs:
       matrix:
         dotnet-version: [ '7.x' ]
 
-    steps:
-      - name: Set Tag Name
-        id: set_tag
-        run: echo "TAG_NAME=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
-    
+    steps:    
       - uses: actions/checkout@v4
       
+      - name: Minor version for each merge
+        id: AutoTagger
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+      - name: echo new tag
+        run: |
+          echo "The next tag version will be: ${{ steps.AutoTagger.outputs.new_tag }}"
+        
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -57,8 +62,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
+          tag_name: ${{ steps.AutoTagger.outputs.new_tag }}
+          release_name: Release ${{ steps.AutoTagger.outputs.new_tag }}
       
       - name: Create Release (x86)   
         uses: csexton/release-asset-action@v2
