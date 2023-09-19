@@ -1,24 +1,69 @@
 name: dotnet package
 
-on: [push]
+on:
+  push:
+    tags:
+      - "v*"
 
+env:
+  PROJECT_PATH: ThunderClient.CollectionToCurl/ThunderClient.CollectionToCurl.csproj
+  EXE_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl.exe
+  EXE_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl.exe
+  ZIP_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl-Portable.zip
+  ZIP_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl-Portable.zip
+  
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  publish:
+    runs-on: windows-latest
     strategy:
       matrix:
         dotnet-version: [ '7.x' ]
 
     steps:
       - uses: actions/checkout@v4
+      
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+          
       - name: Install dependencies
         run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Publish
-        run: dotnet publish --no-build --configuration Release --no-restore --output publish
+        
+      - name: Publish Project
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x86 -p:PublishSingleFile=true --no-restore
+        
+      - name: Create Zip File (x86)
+        uses: papeloto/action-zip@v1
+        with:
+          files: ${{ env.EXE_PATH_86 }}
+          dest: ${{ env.ZIP_PATH_86 }}
+          
+      - name: Create Zip File (x64)
+        uses: papeloto/action-zip@v1
+        with:
+          files: ${{ env.EXE_PATH_64 }}
+          dest: ${{ env.ZIP_PATH_64 }}
+        
+      - name: Initialize Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+      
+      - name: Create Release (x86)   
+        uses: csexton/release-asset-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.ZIP_PATH_86 }}
+          release-url: ${{ steps.create_release.outputs.upload_url }}
+      
+      - name: Create Release (x64)
+        uses: csexton/release-asset-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.ZIP_PATH_64 }}
+          release-url: ${{ steps.create_release.outputs.upload_url }}
