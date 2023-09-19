@@ -4,10 +4,10 @@ on: [push]
 
 env:
   PROJECT_PATH: ThunderClient.CollectionToCurl/ThunderClient.CollectionToCurl.csproj
-  EXE_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl.exe
-  EXE_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl.exe
-  ZIP_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/ThunderClient.CollectionToCurl-Portable-x86.zip
-  ZIP_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/ThunderClient.CollectionToCurl-Portable-x64.zip
+  EXE_PATH_86: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x86/publish/
+  EXE_PATH_64: ThunderClient.CollectionToCurl/bin/Release/net7.0-windows/win-x64/publish/
+  ZIP_PATH_86: ThunderClient.CollectionToCurl/publish/ThunderClient.CollectionToCurl-Portable-x86.zip
+  ZIP_PATH_64: ThunderClient.CollectionToCurl/publish/ThunderClient.CollectionToCurl-Portable-x64.zip
   
 jobs:
   publish:
@@ -39,10 +39,10 @@ jobs:
         run: dotnet restore
         
       - name: Publish Project (x86)
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x86 -p:PublishSingleFile=true --no-restore
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --output ${{ env.EXE_PATH_86 }} --self-contained -r win-x86 -p:PublishSingleFile=true --no-restore
         
       - name: Publish Project (x64)
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-restore
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --output ${{ env.EXE_PATH_64 }} --self-contained -r win-x64 -p:PublishSingleFile=true --no-restore
         
       - name: Create Zip File (x86)
         uses: papeloto/action-zip@v1
