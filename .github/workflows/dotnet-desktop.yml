@@ -1,9 +1,6 @@
 name: dotnet package
 
-on:
-  push:
-    tags:
-      - "v*"
+on: [push]
 
 env:
   PROJECT_PATH: ThunderClient.CollectionToCurl/ThunderClient.CollectionToCurl.csproj
