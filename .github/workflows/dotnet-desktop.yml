@@ -30,8 +30,11 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
         
-      - name: Publish Project
+      - name: Publish Project (x86)
         run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x86 -p:PublishSingleFile=true --no-restore
+        
+      - name: Publish Project (x64)
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-restore
         
       - name: Create Zip File (x86)
         uses: papeloto/action-zip@v1
